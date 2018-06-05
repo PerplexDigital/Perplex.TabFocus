@@ -20,6 +20,10 @@ Every directive expects some function or expression to be evaluated. Some exampl
 -   `tab-focus-once="vm.fn.init()"`
 -   `tab-refocus="vm.fn.run(vm.state.x)"`
 
+## Installation
+
+Until a NuGet package or Our.Umbraco package is released, simply copy the folder `Perplex.TabFocus` to your `App_Plugins` folder.
+
 ## Example: Lazily Load a Custom Property Editor
 
 The most obvious use case for these directives is to lazily load a custom property editor.
