@@ -36,15 +36,18 @@ And a controller similar to this:
 
 ```javascript
 angular.module("umbraco").controller("Perplex.Editor.Controller", function() {
-    this.init = function() {
+    var vm = this;
+
+    vm.init = function() {
         // Slow API call to retrieve data ...
+        // vm.someData = ...
     };
 
-    this.init();
+    vm.init();
 });
 ```
 
-If we want to defer the call to this.init() until the tab becomes active, we simply change the HTML and JS to this:
+If we want to defer the call to `vm.init()` until the tab becomes active, we simply change the HTML and JS to this:
 
 ```html
 <div ng-controller="Perplex.Editor.Controller as vm"
@@ -55,12 +58,15 @@ If we want to defer the call to this.init() until the tab becomes active, we sim
 
 ```javascript
 angular.module("umbraco").controller("Perplex.Editor.Controller", function() {
-    this.init = function() {
+    var vm = this;
+
+    vm.init = function() {
         // Slow API call to retrieve data ...
+        // vm.someData = ...
     };
 
-    // this.init is removed!
+    // vm.init() is removed
 });
 ```
 
-That is, `this.init()` is removed from the controller and put in the template as `tab-focus-once="vm.init()"`, which will be automatically executed when the tab is focused for the first time.
+That is, `vm.init()` is removed from the controller and put in the template as `tab-focus-once="vm.init()"`, which will be automatically executed when the tab is focused for the first time.
