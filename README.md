@@ -26,7 +26,7 @@ That is, delay some "init" function until it is actually needed, i.e. until the 
 
 Assuming we have some custom property editor named Perplex.Editor with the following HTML template:
 
-```
+```html
 <div ng-controller="Perplex.Editor.Controller as vm">
     <h1 ng-bind="vm.someData"></h1>
 </div>
@@ -34,11 +34,11 @@ Assuming we have some custom property editor named Perplex.Editor with the follo
 
 And a controller similar to this:
 
-```
+```javascript
 angular.module("umbraco").controller("Perplex.Editor.Controller", function() {
     this.init = function() {
         // Slow API call to retrieve data ...
-    }
+    };
 
     this.init();
 });
@@ -46,18 +46,18 @@ angular.module("umbraco").controller("Perplex.Editor.Controller", function() {
 
 If we want to defer the call to this.init() until the tab becomes active, we simply change the HTML and JS to this:
 
-```
+```html
 <div ng-controller="Perplex.Editor.Controller as vm"
      tab-focus-once="vm.init()">
     <h1 ng-bind="vm.someData"></h1>
 </div>
 ```
 
-```
+```javascript
 angular.module("umbraco").controller("Perplex.Editor.Controller", function() {
     this.init = function() {
         // Slow API call to retrieve data ...
-    }
+    };
 
     // this.init is removed!
 });
