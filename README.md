@@ -2,7 +2,8 @@
 
 > Work in progress, subject to change. Will likely be published as a package on NuGet / Our.Umbraco at some point in June 2018. When properly tested it can be submitted as a PR to Umbraco. The PR will use the Umbraco event app.tabChange rather than MutationObserver. This version does not, as that event was added only recently (in 7.7.10). This current version should work for most Umbraco 7 versions rather than only >= 7.7.10.
 
-Umbraco BackOffice directives to run functions upon tab focus
+Umbraco BackOffice directives to execute some Angular expression or function when the tab containing the directive is focused.
+When the directive is placed on a property on the first tab it will immediately be executed, of course.
 
 The following directives are provided:
 
