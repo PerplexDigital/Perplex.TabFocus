@@ -1,8 +1,15 @@
 angular.module("umbraco").service("tabFocusService", [
     "$rootScope",
-    function($rootScope) {
+    "$timeout",
+    function($rootScope, $timeout) {
         // Format: { tabId => { callbacks: Array<Function>, observer: <MutationObserver> } }
         var callbacksByTab = {};
+
+        // Unique tabId counter
+        var nextTabId = 0;
+
+        // Data attribute used to attach tabId to DOM element.
+        var tabIdAttr = "data-tab-focus-tab-id";
 
         /**
          * Subscribes to tab focus events for the given $element
@@ -25,12 +32,16 @@ angular.module("umbraco").service("tabFocusService", [
                 removeCallback(tabId, callback);
             }
 
-            if (tabIsActive(tab)) {
-                // Tab was already active
-                // Run callback and provide the unsubscribe
-                // immediately as this function has not returned it yet.
-                callback(unsubscribe);
-            }
+            $timeout(function () {
+                // Check if tab is active after next digest
+                // to allow Angular to act on ng-show / ng-if etc.
+                if (tabIsActive(tab)) {
+                    // Tab was already active
+                    // Run callback and provide the unsubscribe
+                    // immediately as this function has not returned it yet.
+                    callback(unsubscribe);
+                }
+            });            
 
             return unsubscribe;
         }
@@ -79,7 +90,7 @@ angular.module("umbraco").service("tabFocusService", [
          * @returns {boolean}
          */
         function tabIsActive(tab) {
-            return tab.classList.contains("active");
+            return !tab.classList.contains("ng-hide");
         }
 
         /**
@@ -92,7 +103,7 @@ angular.module("umbraco").service("tabFocusService", [
                 return false;
             }
 
-            var tabWasActive = /(^| )active( |$)/.test(mutation.oldValue);
+            var tabWasActive = !/(^| )ng-hide( |$)/.test(mutation.oldValue);
             return !tabWasActive;
         }
 
@@ -108,7 +119,18 @@ angular.module("umbraco").service("tabFocusService", [
                 return null;
             }
 
-            return tab.getAttribute("rel");
+            var tabId = tab.getAttribute(tabIdAttr);
+
+            if (tabId == null) {
+                tabId = setTabId(tab);
+            }
+
+            return tabId;
+        }
+
+        function setTabId(tab) {            
+            tab.setAttribute(tabIdAttr, nextTabId);
+            return nextTabId++;
         }
 
         /**
@@ -117,7 +139,9 @@ angular.module("umbraco").service("tabFocusService", [
          * @returns {Element}
          */
         function getTab($element) {
-            return $element.closest(".umb-tab-pane")[0];
+            // Content Tab: .umb-expansion-panel__content
+            // Content App: .umb-editor-sub-view__content
+            return $element.closest(".umb-expansion-panel__content,.umb-editor-sub-view__content")[0];
         }
 
         /**
