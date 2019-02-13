@@ -41,7 +41,7 @@ angular.module("umbraco").service("tabFocusService", [
                     // immediately as this function has not returned it yet.
                     callback(unsubscribe);
                 }
-            });            
+            });
 
             return unsubscribe;
         }
@@ -128,7 +128,7 @@ angular.module("umbraco").service("tabFocusService", [
             return tabId;
         }
 
-        function setTabId(tab) {            
+        function setTabId(tab) {
             tab.setAttribute(tabIdAttr, nextTabId);
             return nextTabId++;
         }
@@ -139,9 +139,9 @@ angular.module("umbraco").service("tabFocusService", [
          * @returns {Element}
          */
         function getTab($element) {
-            // Content Tab: .umb-expansion-panel__content
+            // Content Tab: .umb-group-panel__content
             // Content App: .umb-editor-sub-view__content
-            return $element.closest(".umb-expansion-panel__content,.umb-editor-sub-view__content")[0];
+            return $element.closest(".umb-group-panel__content,.umb-editor-sub-view__content")[0];
         }
 
         /**
